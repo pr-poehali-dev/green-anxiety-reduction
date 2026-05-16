@@ -233,24 +233,26 @@ export default function Index() {
             )}
           </div>
 
-          {/* Превью техник */}
-          <div style={{ fontSize: 13, fontWeight: 700, color: "#1b4332", marginBottom: 10 }}>Все техники ({techniques.length}):</div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(2,1fr)", gap: 10 }}>
+          {/* Превью карточек */}
+          <div style={{ fontSize: 13, fontWeight: 700, color: "#1b4332", marginBottom: 10 }}>
+            Предпросмотр карточек (10×14.5 см):
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(2,1fr)", gap: 12 }}>
             {techniques.map((t) => (
-              <div key={t.num} style={{ background: "white", borderRadius: 10, border: `2px solid ${t.color}`, overflow: "hidden" }}>
-                <div style={{ background: t.color, padding: "7px 10px", display: "flex", alignItems: "center", gap: 6 }}>
-                  <span style={{ fontFamily: "'Caveat',cursive", fontSize: 14, fontWeight: 700, color: "white", opacity: 0.65 }}>{t.num}</span>
-                  <span style={{ fontFamily: "'Caveat',cursive", fontSize: 13, fontWeight: 700, color: "white", lineHeight: 1.2 }}>{t.title}</span>
+              /* соотношение 100:145 = 10:14.5 */
+              <div key={t.num} style={{ aspectRatio: "100/145", background: "white", borderRadius: 8, border: `2px solid ${t.color}`, overflow: "hidden", display: "flex", flexDirection: "column", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}>
+                <div style={{ background: t.color, padding: "5px 8px", display: "flex", alignItems: "center", gap: 5 }}>
+                  <span style={{ fontFamily: "'Caveat',cursive", fontSize: 12, fontWeight: 700, color: "white", opacity: 0.65 }}>{t.num}</span>
+                  <span style={{ fontFamily: "'Caveat',cursive", fontSize: 12, fontWeight: 700, color: "white", lineHeight: 1.2 }}>{t.title}</span>
                 </div>
-                <div style={{ padding: "7px 10px" }}>
-                  <div style={{ fontSize: 9.5, color: "#555", fontStyle: "italic", marginBottom: 5 }}>{t.subtitle}</div>
-                  {t.steps.slice(0, 3).map((s, i) => (
-                    <div key={i} style={{ display: "flex", gap: 5, marginBottom: 2 }}>
-                      <span style={{ fontSize: 9, color: t.color, fontWeight: 700 }}>{i + 1}.</span>
-                      <span style={{ fontSize: 9.5, color: "#333", lineHeight: 1.4 }}>{s}</span>
+                <div style={{ padding: "5px 8px", flex: 1 }}>
+                  <div style={{ fontSize: 8, color: "#555", fontStyle: "italic", marginBottom: 4 }}>{t.subtitle}</div>
+                  {t.steps.map((s, i) => (
+                    <div key={i} style={{ display: "flex", gap: 4, marginBottom: 2 }}>
+                      <span style={{ fontSize: 7.5, color: t.color, fontWeight: 700, minWidth: 9 }}>{i + 1}.</span>
+                      <span style={{ fontSize: 7.5, color: "#333", lineHeight: 1.4 }}>{s}</span>
                     </div>
                   ))}
-                  <div style={{ fontSize: 8.5, color: "#bbb", marginTop: 3 }}>+ ещё {t.steps.length - 3} шага...</div>
                 </div>
               </div>
             ))}

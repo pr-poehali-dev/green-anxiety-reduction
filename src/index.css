@@ -105,11 +105,13 @@
 .screen-only {
   display: block;
 }
+
+/* На экране cards-wrap скрыт — показывается только при печати */
 .cards-wrap {
   display: none;
 }
 
-/* базовые стили карточки для экрана */
+/* базовые стили карточки для экрана (в предпросмотре) */
 .pcard {
   display: flex;
   flex-direction: column;
@@ -119,7 +121,7 @@
   background: white;
 }
 
-/* на экране inner-wrap просто растягивается */
+/* на экране inner-wrap просто flex-колонка */
 .pcard-inner-wrap {
   display: flex;
   flex-direction: column;
@@ -129,83 +131,88 @@
 
 /* ── ПЕЧАТЬ ── */
 @media print {
-  /* Страница A4, поля минимальные — карточка по центру */
+  /*
+    A4 = 210×297 мм
+    2 карточки по 100×145 мм в ряд с отступами:
+    (210 - 2×100) / 3 ≈ 3.3 мм слева/между/справа
+    (297 - 145) / 2 ≈ 76 мм сверху/снизу — центрируем
+  */
   @page {
-    size: A4 portrait;
+    size: 210mm 297mm;
     margin: 0;
   }
 
   * {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
+    box-sizing: border-box !important;
   }
 
+  html,
   body {
     background: white !important;
-    margin: 0;
-    padding: 0;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 210mm !important;
   }
 
   .screen-only {
     display: none !important;
   }
 
-  /* обёртка — просто поток блоков */
+  /* Обёртка — сетка 2 колонки, по 2 карточки на лист */
   .cards-wrap {
-    display: block !important;
-    margin: 0;
-    padding: 0;
+    display: grid !important;
+    grid-template-columns: 100mm 100mm !important;
+    grid-auto-rows: 145mm !important;
+    /* 2 ряда × 145 мм + gap 7 мм = 297 мм (ровно A4) */
+    gap: 7mm 10mm !important;
+    padding: 0 !important;
+    width: 210mm !important;
+    margin: 0 !important;
   }
 
-  /* каждая карточка — отдельная страница A4,
-     внутри неё прямоугольник 100×145 мм по центру */
+  /* Каждая карточка — ровно 100×145 мм */
   .pcard {
-    /* занимаем весь лист A4 */
-    width: 210mm !important;
-    height: 297mm !important;
-    min-height: 297mm !important;
-    max-height: 297mm !important;
+    width: 100mm !important;
+    height: 145mm !important;
+    min-height: 145mm !important;
+    max-height: 145mm !important;
     border: none !important;
     border-radius: 0 !important;
-    overflow: hidden;
-    break-before: page;
-    page-break-before: always;
-    background: white;
-    box-shadow: none;
+    background: transparent !important;
+    box-shadow: none !important;
     display: flex !important;
     flex-direction: column !important;
-    align-items: center !important;
-    justify-content: center !important;
-    position: relative;
+    align-items: stretch !important;
+    justify-content: stretch !important;
+    overflow: visible !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
   }
 
-  /* первая карточка — без разрыва перед ней */
-  .pcard:first-child {
-    break-before: auto;
-    page-break-before: auto;
+  /* Каждая нечётная карточка (3-я, 5-я...) — новая строка/страница */
+  .pcard:nth-child(2n + 1):not(:first-child) {
+    break-before: page !important;
+    page-break-before: always !important;
+    grid-column: 1 !important;
   }
 
-  /* внутренний прямоугольник карточки 100×145 мм */
-  .pcard > * {
-    width: 100mm;
-    max-width: 100mm;
-  }
-
-  /* обёртка содержимого карточки */
+  /* Внутренний прямоугольник — сама карточка 100×145 мм */
   .pcard-inner-wrap {
     width: 100mm !important;
     height: 145mm !important;
     min-height: 145mm !important;
     max-height: 145mm !important;
-    border: 1.5px solid #2d6a4f;
-    border-radius: 4mm;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    background: white;
-    position: relative;
-    /* пунктирная линия для вырезания */
-    outline: 1.5px dashed #a5d6a7;
-    outline-offset: 3mm;
+    border: 1.5px solid #2d6a4f !important;
+    border-radius: 3.5mm !important;
+    overflow: hidden !important;
+    display: flex !important;
+    flex-direction: column !important;
+    background: white !important;
+    position: relative !important;
+    /* пунктирная линия для вырезания — 3 мм от края */
+    outline: 1px dashed #74c69d !important;
+    outline-offset: 3mm !important;
   }
 }
