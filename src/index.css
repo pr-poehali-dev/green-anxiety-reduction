@@ -119,11 +119,20 @@
   background: white;
 }
 
+/* на экране inner-wrap просто растягивается */
+.pcard-inner-wrap {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+}
+
 /* ── ПЕЧАТЬ ── */
 @media print {
+  /* Страница A4, поля минимальные — карточка по центру */
   @page {
     size: A4 portrait;
-    margin: 8mm 8mm 8mm 8mm;
+    margin: 0;
   }
 
   * {
@@ -141,31 +150,62 @@
     display: none !important;
   }
 
+  /* обёртка — просто поток блоков */
   .cards-wrap {
-    display: grid !important;
-    grid-template-columns: 97mm 97mm;
-    grid-auto-rows: 142mm;
-    gap: 4mm 4mm;
-    width: 198mm;
+    display: block !important;
     margin: 0;
     padding: 0;
   }
 
-  /* каждая карточка ровно 97×142 мм ≈ 10×14.5 см */
+  /* каждая карточка — отдельная страница A4,
+     внутри неё прямоугольник 100×145 мм по центру */
   .pcard {
-    width: 97mm !important;
-    height: 142mm !important;
-    min-height: 142mm !important;
-    max-height: 142mm !important;
-    border: 1.5px solid #2d6a4f;
-    border-radius: 3mm;
+    /* занимаем весь лист A4 */
+    width: 210mm !important;
+    height: 297mm !important;
+    min-height: 297mm !important;
+    max-height: 297mm !important;
+    border: none !important;
+    border-radius: 0 !important;
     overflow: hidden;
-    break-inside: avoid;
-    page-break-inside: avoid;
+    break-before: page;
+    page-break-before: always;
     background: white;
     box-shadow: none;
     display: flex !important;
     flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
     position: relative;
+  }
+
+  /* первая карточка — без разрыва перед ней */
+  .pcard:first-child {
+    break-before: auto;
+    page-break-before: auto;
+  }
+
+  /* внутренний прямоугольник карточки 100×145 мм */
+  .pcard > * {
+    width: 100mm;
+    max-width: 100mm;
+  }
+
+  /* обёртка содержимого карточки */
+  .pcard-inner-wrap {
+    width: 100mm !important;
+    height: 145mm !important;
+    min-height: 145mm !important;
+    max-height: 145mm !important;
+    border: 1.5px solid #2d6a4f;
+    border-radius: 4mm;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    background: white;
+    position: relative;
+    /* пунктирная линия для вырезания */
+    outline: 1.5px dashed #a5d6a7;
+    outline-offset: 3mm;
   }
 }

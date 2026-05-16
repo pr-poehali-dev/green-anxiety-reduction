@@ -179,7 +179,7 @@ export default function Index() {
           <span>🖨️</span>
           <div style={{ flex: 1 }}>
             <div style={{ fontSize: 11, fontWeight: 700, color: "#1b4332" }}>Макет для печати</div>
-            <div style={{ fontSize: 10, color: "#2d6a4f" }}>Карточки 10×14.5 см, 2 на листе A4 — вырезать по контуру</div>
+            <div style={{ fontSize: 10, color: "#2d6a4f" }}>Карточки 10×14.5 см, 1 карточка на лист A4 — вырезать по пунктирной линии</div>
           </div>
           <button onClick={() => window.print()} style={{ background: "#2d6a4f", color: "white", border: "none", borderRadius: 6, padding: "7px 14px", fontSize: 11, fontWeight: 700, cursor: "pointer", fontFamily: "'Golos Text',sans-serif" }}>
             Печать
@@ -270,7 +270,7 @@ function PrintLayout() {
 
       {/* ── 1. ОБЛОЖКА ── */}
       <Card>
-        <div style={{ background: "linear-gradient(160deg,#1b4332 0%,#2d6a4f 55%,#52b788 100%)", width: "100%", height: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "space-between", padding: "16px 14px 12px", position: "relative", overflow: "hidden" }}>
+        <div style={{ background: "linear-gradient(160deg,#1b4332 0%,#2d6a4f 55%,#52b788 100%)", width: "100%", flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "space-between", padding: "16px 14px 12px", position: "relative", overflow: "hidden" }}>
           <div style={{ position: "absolute", inset: 0, opacity: 0.06, fontSize: 36, lineHeight: 1.5, userSelect: "none", overflow: "hidden" }}>
             {"🌿🌱🍃".repeat(40)}
           </div>
@@ -418,7 +418,7 @@ function PrintLayout() {
 
       {/* ── ФИНАЛЬНАЯ ── */}
       <Card>
-        <div style={{ background: "linear-gradient(135deg,#1b4332 0%,#40916c 100%)", width: "100%", height: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 10, position: "relative", overflow: "hidden" }}>
+        <div style={{ background: "linear-gradient(135deg,#1b4332 0%,#40916c 100%)", width: "100%", flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 10, position: "relative", overflow: "hidden" }}>
           <div style={{ position: "absolute", inset: 0, opacity: 0.05, fontSize: 28, lineHeight: 1.7, userSelect: "none" }}>
             {"🌿🌱🍃".repeat(40)}
           </div>
@@ -445,14 +445,16 @@ const txt: React.CSSProperties = { fontSize: 10.5, color: "#222", lineHeight: 1.
 function Card({ children, pageNum }: { children: React.ReactNode; pageNum?: number }) {
   return (
     <div className="pcard">
-      <div style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden" }}>
-        {children}
-      </div>
-      {pageNum !== undefined && (
-        <div style={{ textAlign: "center", fontSize: 7.5, color: "#aaa", padding: "3px 0 4px", fontWeight: 600, fontFamily: "'Golos Text',sans-serif", flexShrink: 0 }}>
-          {pageNum}
+      <div className="pcard-inner-wrap">
+        <div style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden" }}>
+          {children}
         </div>
-      )}
+        {pageNum !== undefined && (
+          <div style={{ textAlign: "center", fontSize: 7.5, color: "#aaa", padding: "3px 0 4px", fontWeight: 600, fontFamily: "'Golos Text',sans-serif", flexShrink: 0 }}>
+            {pageNum}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
