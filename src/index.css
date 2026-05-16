@@ -133,9 +133,9 @@
 @media print {
   /*
     A4 = 210×297 мм
-    2 карточки по 100×145 мм в ряд с отступами:
-    (210 - 2×100) / 3 ≈ 3.3 мм слева/между/справа
-    (297 - 145) / 2 ≈ 76 мм сверху/снизу — центрируем
+    На листе 2 карточки 100×145 мм в ряд:
+    колонки: 100 + 5(gap) + 100 = 205 мм, слева/справа по 2.5 мм
+    строки:  145 + 7(gap) + 145 = 297 мм — точно заполняет A4
   */
   @page {
     size: 210mm 297mm;
@@ -160,16 +160,17 @@
     display: none !important;
   }
 
-  /* Обёртка — сетка 2 колонки, по 2 карточки на лист */
+  /* Сетка: 2 колонки по 100 мм, 2 строки по 145 мм = один лист A4 */
   .cards-wrap {
     display: grid !important;
     grid-template-columns: 100mm 100mm !important;
     grid-auto-rows: 145mm !important;
-    /* 2 ряда × 145 мм + gap 7 мм = 297 мм (ровно A4) */
-    gap: 7mm 10mm !important;
-    padding: 0 !important;
+    column-gap: 5mm !important;
+    row-gap: 7mm !important;
+    padding: 0 2.5mm !important;
     width: 210mm !important;
     margin: 0 !important;
+    box-sizing: border-box !important;
   }
 
   /* Каждая карточка — ровно 100×145 мм */
@@ -184,35 +185,34 @@
     box-shadow: none !important;
     display: flex !important;
     flex-direction: column !important;
-    align-items: stretch !important;
-    justify-content: stretch !important;
     overflow: visible !important;
     break-inside: avoid !important;
     page-break-inside: avoid !important;
   }
 
-  /* Каждая нечётная карточка (3-я, 5-я...) — новая строка/страница */
-  .pcard:nth-child(2n + 1):not(:first-child) {
+  /* Новый лист A4 начинается каждые 2 строки (4 карточки нет — только 2 в ряд) */
+  /* строки 1→2: карточки 1,2 | 3,4  = лист 1
+     строки 3→4: карточки 5,6 | 7,8  = лист 2
+     и т.д. */
+  .pcard:nth-child(4n + 1):not(:first-child) {
     break-before: page !important;
     page-break-before: always !important;
-    grid-column: 1 !important;
   }
 
-  /* Внутренний прямоугольник — сама карточка 100×145 мм */
+  /* Внутренний прямоугольник с рамкой и пунктиром для вырезания */
   .pcard-inner-wrap {
     width: 100mm !important;
     height: 145mm !important;
     min-height: 145mm !important;
     max-height: 145mm !important;
     border: 1.5px solid #2d6a4f !important;
-    border-radius: 3.5mm !important;
+    border-radius: 3mm !important;
     overflow: hidden !important;
     display: flex !important;
     flex-direction: column !important;
     background: white !important;
     position: relative !important;
-    /* пунктирная линия для вырезания — 3 мм от края */
     outline: 1px dashed #74c69d !important;
-    outline-offset: 3mm !important;
+    outline-offset: 2.5mm !important;
   }
 }
