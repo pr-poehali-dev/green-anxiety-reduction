@@ -99,3 +99,99 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* ===================== PRINT CARD SYSTEM ===================== */
+
+/* Screen: hide print grid, show app view */
+.screen-only {
+  display: block;
+}
+.print-grid {
+  display: none;
+}
+
+/* Print: hide app view, show print grid */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 8mm;
+  }
+
+  body {
+    background: white !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .screen-only {
+    display: none !important;
+  }
+
+  .print-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6mm;
+    width: 100%;
+  }
+
+  /* Each mini card */
+  .pcard {
+    width: 90mm;
+    height: 128mm;
+    border: 1.5px solid #2d6a4f;
+    border-radius: 4mm;
+    overflow: hidden;
+    position: relative;
+    break-inside: avoid;
+    page-break-inside: avoid;
+    background: white;
+    box-shadow: none;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .cover-card {
+    border-color: #1b4332;
+  }
+
+  .pcard-inner {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .pcard-head {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 10px 6px;
+    flex-shrink: 0;
+  }
+
+  .pcard-htitle {
+    font-family: "Caveat", cursive;
+    font-size: 16pt;
+    font-weight: 700;
+    color: white;
+    line-height: 1.1;
+  }
+
+  .pcard-body {
+    flex: 1;
+    padding: 8px 10px 4px;
+    overflow: hidden;
+  }
+
+  .pcard-page {
+    position: absolute;
+    bottom: 4px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 7.5pt;
+    color: #999;
+    font-family: "Golos Text", sans-serif;
+    font-weight: 600;
+  }
+}
