@@ -102,96 +102,70 @@
 
 /* ===================== PRINT CARD SYSTEM ===================== */
 
-/* Screen: hide print grid, show app view */
 .screen-only {
   display: block;
 }
-.print-grid {
+.cards-wrap {
   display: none;
 }
 
-/* Print: hide app view, show print grid */
+/* базовые стили карточки для экрана */
+.pcard {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 8px;
+  border: 2px solid #2d6a4f;
+  background: white;
+}
+
+/* ── ПЕЧАТЬ ── */
 @media print {
   @page {
     size: A4 portrait;
-    margin: 8mm;
+    margin: 8mm 8mm 8mm 8mm;
+  }
+
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
 
   body {
     background: white !important;
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
+    margin: 0;
+    padding: 0;
   }
 
   .screen-only {
     display: none !important;
   }
 
-  .print-grid {
+  .cards-wrap {
     display: grid !important;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 6mm;
-    width: 100%;
+    grid-template-columns: 97mm 97mm;
+    grid-auto-rows: 142mm;
+    gap: 4mm 4mm;
+    width: 198mm;
+    margin: 0;
+    padding: 0;
   }
 
-  /* Each mini card */
+  /* каждая карточка ровно 97×142 мм ≈ 10×14.5 см */
   .pcard {
-    width: 90mm;
-    height: 128mm;
+    width: 97mm !important;
+    height: 142mm !important;
+    min-height: 142mm !important;
+    max-height: 142mm !important;
     border: 1.5px solid #2d6a4f;
-    border-radius: 4mm;
+    border-radius: 3mm;
     overflow: hidden;
-    position: relative;
     break-inside: avoid;
     page-break-inside: avoid;
     background: white;
     box-shadow: none;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .cover-card {
-    border-color: #1b4332;
-  }
-
-  .pcard-inner {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-  }
-
-  .pcard-head {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 7px 10px 6px;
-    flex-shrink: 0;
-  }
-
-  .pcard-htitle {
-    font-family: "Caveat", cursive;
-    font-size: 16pt;
-    font-weight: 700;
-    color: white;
-    line-height: 1.1;
-  }
-
-  .pcard-body {
-    flex: 1;
-    padding: 8px 10px 4px;
-    overflow: hidden;
-  }
-
-  .pcard-page {
-    position: absolute;
-    bottom: 4px;
-    left: 0;
-    right: 0;
-    text-align: center;
-    font-size: 7.5pt;
-    color: #999;
-    font-family: "Golos Text", sans-serif;
-    font-weight: 600;
+    display: flex !important;
+    flex-direction: column !important;
+    position: relative;
   }
 }
